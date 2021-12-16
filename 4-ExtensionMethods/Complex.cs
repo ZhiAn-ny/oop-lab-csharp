@@ -5,8 +5,8 @@ namespace ExtensionMethods
     /// <inheritdoc cref="IComplex"/>
     public class Complex : IComplex
     {
-        private readonly double re;
-        private readonly double im;
+        private readonly double _re;
+        private readonly double _im;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Complex"/> class.
@@ -15,71 +15,55 @@ namespace ExtensionMethods
         /// <param name="im">the imaginary part.</param>
         public Complex(double re, double im)
         {
-            this.re = re;
-            this.im = im;
+            this._re = re;
+            this._im = im;
         }
 
         /// <inheritdoc cref="IComplex.Real"/>
-        public double Real
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public double Real => _re;
 
         /// <inheritdoc cref="IComplex.Imaginary"/>
-        public double Imaginary
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public double Imaginary => _im;
 
         /// <inheritdoc cref="IComplex.Modulus"/>
-        public double Modulus
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public double Modulus => Math.Sqrt(Math.Pow(Real, 2) + Math.Pow(Imaginary, 2));
 
         /// <inheritdoc cref="IComplex.Phase"/>
-        public double Phase
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        public double Phase => Math.Atan(Imaginary / Real);
 
         /// <inheritdoc cref="IComplex.ToString"/>
         public override string ToString()
         {
             // TODO improve
-            return base.ToString();
+            String str = Real.Equals(0) ? "" : Real.ToString();
+            if (!Imaginary.Equals(0))
+            {
+                Double abs = Math.Abs(Imaginary);
+                if (abs.Equals(1))
+                {
+                    return abs > 0 ? str + "+i" : str + "-i";
+                }
+                return abs > 0 ? str + "+" + Imaginary + "i" : str + Imaginary + "i";
+            }
+            return Real.ToString();
         }
 
         /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
         public bool Equals(IComplex other)
         {
-            throw new System.NotImplementedException();
+            return GetHashCode().Equals(other.GetHashCode());
         }
 
         /// <inheritdoc cref="object.Equals(object?)"/>
         public override bool Equals(object obj)
         {
-            // TODO improve
-            return base.Equals(obj);
+            if (obj is IComplex)
+                return GetHashCode().Equals(obj.GetHashCode());
+            return false;
         }
 
         /// <inheritdoc cref="object.GetHashCode"/>
-        public override int GetHashCode()
-        {
-            // TODO improve
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => HashCode.Combine(Real, Imaginary);
+
     }
 }
